@@ -80,6 +80,7 @@
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
                 android:text="选择模版"
+                android:visibility="gone"
                 android:textColor="@color/lanse33"
                 android:background="@drawable/zidonghuoqu2"
                 android:layout_width="150dp"

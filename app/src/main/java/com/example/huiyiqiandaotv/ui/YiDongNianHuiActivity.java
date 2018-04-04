@@ -862,7 +862,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 						if (bumen.equals("1") || bumen.equals("2")){
 							//设置成领导背景
-							toprl.setBackgroundResource(R.drawable.lingdao_bg);
+							toprl.setBackgroundResource(R.drawable.pufa_ld);
 							name.setTypeface(typeFace1);
 							zhuangtai.setTypeface(typeFace1);
 							name.setText(item.getName());
@@ -880,7 +880,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 						}else {
 							imageView.setBackgroundColor(Color.parseColor("#00000000"));
-							toprl.setBackgroundResource(R.drawable.yuangongbg);
+							toprl.setBackgroundResource(R.drawable.pufa_yg);
 							name.setTypeface(typeFace1);
 							zhuangtai.setTypeface(typeFace1);
 							name.setText(item.getName());

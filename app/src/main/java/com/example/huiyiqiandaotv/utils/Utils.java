@@ -23,6 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -45,6 +46,16 @@ public class Utils {
      * Making sure public utility methods remain static
      */
     private Utils() {
+    }
+
+    /**
+     * 获取手机IMSI号
+     */
+    public static String getIMSI(Context context){
+        TelephonyManager mTelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String imsi = mTelephonyMgr.getSubscriberId();
+
+        return imsi ;
     }
 
     /**
