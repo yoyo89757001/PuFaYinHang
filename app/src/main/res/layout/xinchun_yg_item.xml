@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ffflll"
+    android:background="@drawable/xinchun1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/touxiang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY" />
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:gravity="center"
+    android:id="@+id/lltt"
+    android:layout_below="@+id/touxiang"
+    android:layout_centerHorizontal="true"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:textSize="50sp"
+        android:text="新春快乐"
+        android:gravity="center"
+        android:id="@+id/zhuangtai55"
+        android:textColor="@color/jinhuang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textSize="50sp"
+        android:gravity="center"
+        android:id="@+id/zhuangtai33"
+        android:textColor="@color/jinhuang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+
+
+    <ImageView
+        android:src="@drawable/xinchun3"
+        android:id="@+id/left_im"
+        android:scaleType="fitXY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:src="@drawable/xinchun4"
+        android:id="@+id/right_im"
+        android:scaleType="fitXY"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:src="@drawable/xinchun2"
+        android:id="@+id/bootn_im"
+        android:scaleType="fitXY"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>
