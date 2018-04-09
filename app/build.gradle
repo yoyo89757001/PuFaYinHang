@@ -5,12 +5,13 @@ android {
     defaultConfig {
         applicationId "com.xiaojun.pufayinhang"
         minSdkVersion 21
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         ndk {
             abiFilters "armeabi", "armeabi-v7a"
         }
+        multiDexEnabled true
     }
 
     dexOptions {
@@ -30,6 +31,21 @@ android {
         targetGenDir 'src/main/java'
     }
 }
+
+afterEvaluate {
+    tasks.matching {
+        it.name.startsWith('dex')
+    }.each { dx ->
+        if (dx.additionalParameters == null) {
+            dx.additionalParameters = []
+        }
+        dx.additionalParameters += '--multi-dex' // enable multidex
+
+        // optional
+        // dx.additionalParameters += "--main-dex-list=$projectDir/<filename>".toString() // enable the main-dex-list
+    }
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -65,6 +81,6 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-android:1.9.8"
     compile "com.badlogicgames.gdx:gdx-freetype:1.9.8"
     compile 'com.facebook.rebound:rebound:0.3.8'
-
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.airbnb.android:lottie:2.0.0' //json动画框架
 }

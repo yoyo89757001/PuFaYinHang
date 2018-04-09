@@ -5,9 +5,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.support.multidex.MultiDexApplication;
+
 import com.example.huiyiqiandaotv.beans.DaoMaster;
 import com.example.huiyiqiandaotv.beans.DaoSession;
 import com.example.huiyiqiandaotv.cookies.CookiesManager;
+import com.example.huiyiqiandaotv.utils.Utils;
 import com.tencent.bugly.Bugly;
 
 import java.io.File;
@@ -22,11 +25,11 @@ import okhttp3.OkHttpClient;
 /**
  * Created by tangjun on 14-8-24.
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 	public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
 	private final static String TAG = "CookiesManager";
 	public static MyApplication myApplication;
-	//public static OkHttpClient okHttpClient=null;
+	public static OkHttpClient okHttpClient=null;
 	private DaoMaster.DevOpenHelper mHelper;
 	public DaoMaster mDaoMaster;
 	public DaoSession mDaoSession;
@@ -109,7 +112,7 @@ public class MyApplication extends Application {
 
 
 		JPushInterface.init(getApplicationContext());
-		JPushInterface.setAlias(getApplicationContext(),1,"123456a");
+		JPushInterface.setAlias(getApplicationContext(),1, Utils.getIMSI());
 	}
 
 
@@ -125,7 +128,7 @@ public class MyApplication extends Application {
 		// 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 greenDAO 已经帮你做了。
 		// 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
 		// 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
-		mHelper = new DaoMaster.DevOpenHelper(this, "noteukkk", null);
+		mHelper = new DaoMaster.DevOpenHelper(this, "pufayinhang", null);
 		SQLiteDatabase db = mHelper.getWritableDatabase();
 		// 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
 		mDaoMaster = new DaoMaster(db);
@@ -236,4 +239,5 @@ public class MyApplication extends Application {
 //		}
 //		return okHttpClient;
 //	}
+
 }

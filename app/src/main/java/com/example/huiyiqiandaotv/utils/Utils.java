@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
@@ -51,11 +52,22 @@ public class Utils {
     /**
      * 获取手机IMSI号
      */
-    public static String getIMSI(Context context){
-        TelephonyManager mTelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String imsi = mTelephonyMgr.getSubscriberId();
+    public static String getIMSI(){
 
-        return imsi ;
+
+        return "355" +
+        Build.BOARD.length()%10 +
+                Build.BRAND.length()%10 +
+                Build.DEVICE.length()%10 +
+                Build.DISPLAY.length()%10 +
+                Build.HOST.length()%10 +
+                Build.ID.length()%10 +
+                Build.MANUFACTURER.length()%10 +
+                Build.MODEL.length()%10 +
+                Build.PRODUCT.length()%10 +
+                Build.TAGS.length()%10 +
+                Build.TYPE.length()%10 +
+                Build.USER.length()%10;
     }
 
     /**

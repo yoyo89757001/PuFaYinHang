@@ -20,18 +20,34 @@ import com.example.huiyiqiandaotv.beans.BaoCunBean;
 import com.example.huiyiqiandaotv.beans.BaoCunBeanDao;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBean;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBeanDao;
+import com.example.huiyiqiandaotv.beans.QianDaoId;
 import com.example.huiyiqiandaotv.beans.QianDaoIdDao;
+import com.example.huiyiqiandaotv.beans.RenShu;
 import com.example.huiyiqiandaotv.dialog.MoBanDialog;
 import com.example.huiyiqiandaotv.dialog.XiuGaiHouTaiDialog;
 import com.example.huiyiqiandaotv.dialog.XiuGaiWenZiDialog;
 import com.example.huiyiqiandaotv.dialog.XiuGaiXinXiDialog;
 import com.example.huiyiqiandaotv.dialog.YuLanDialog;
 import com.example.huiyiqiandaotv.dialog.YuYingDialog;
+import com.example.huiyiqiandaotv.utils.GsonUtil;
 import com.example.huiyiqiandaotv.utils.Utils;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.sdsmdg.tastytoast.TastyToast;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 public class SheZhiActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
@@ -507,7 +523,17 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                                 baoCunBean.setGuanggaojiMing(dialog.getGuangGaoJiMing());
                                 baoCunBeanDao.update(baoCunBean);
                                 baoCunBean=baoCunBeanDao.load(123456L);
+                                if (baoCunBean.getZhanghuId()!=null && !baoCunBean.getZhanghuId().equals("")){
+                                    link_login();
+
+                                }else {
+
+                                    TastyToast.makeText(SheZhiActivity.this,"请先设置账户id",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+                                }
+
+
                                 dialog.dismiss();
+
                             }
                         });
                         dialog.setQuXiaoListener(new View.OnClickListener() {
@@ -947,5 +973,69 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
         }
     }
 
+    private void link_login(){
+
+        final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
+
+        OkHttpClient okHttpClient= MyApplication.getOkHttpClient();
+
+
+        //	RequestBody requestBody = RequestBody.create(JSON, json);
+
+		RequestBody body = new FormBody.Builder()
+				.add("possId",Utils.getIMSI())
+				.add("possName",baoCunBean.getGuanggaojiMing())
+                .add("accountId",baoCunBean.getZhanghuId())
+                .add("status","1")
+				.build();
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .header("Content-Type", "application/json")
+                .header("user-agent","Koala Admin")
+                //.post(requestBody)
+                .get()
+                .post(body)
+                .url(baoCunBean.getHoutaiDiZhi()+"/addPossEntity.do");
+
+        // step 3：创建 Call 对象
+        Call call = okHttpClient.newCall(requestBuilder.build());
+        //step 4: 开始异步请求
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("AllConnects", "请求失败"+e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("AllConnects", "请求成功"+call.request().toString());
+                //获得返回体
+                	try {
+
+                        ResponseBody body = response.body();
+                        String ss = body.string().trim();
+                        Log.d("AllConnects", "序列号" + ss);
+
+                        JsonArray jsonObject = GsonUtil.parse(ss).getAsJsonArray();
+                        Gson gson = new Gson();
+                        int N = 0;
+                        RenShu renShu = gson.fromJson(jsonObject.get(0), RenShu.class);
+
+                        N = renShu.getCount();
+                        //Log.d("YiDongNianHuiActivity", "N:" + N);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TastyToast.makeText(SheZhiActivity.this, "设置成功", TastyToast.LENGTH_SHORT, TastyToast.INFO).show();
+                            }
+                        });
+                    }catch (Exception e){
+                        Log.d("SheZhiActivity", e.getMessage()+"");
+                    }
+
+
+            }
+        });
+    }
 
 }

@@ -50,6 +50,8 @@ import com.example.huiyiqiandaotv.beans.ShiBieBean;
 import com.example.huiyiqiandaotv.beans.ShiShiRenShuBean;
 import com.example.huiyiqiandaotv.beans.TanChuangBean;
 import com.example.huiyiqiandaotv.beans.WBBean;
+import com.example.huiyiqiandaotv.beans.ZhuJiBeanH;
+import com.example.huiyiqiandaotv.cookies.CookiesManager;
 import com.example.huiyiqiandaotv.interfaces.RecytviewCash;
 import com.example.huiyiqiandaotv.service.AlarmReceiver;
 import com.example.huiyiqiandaotv.tts.control.InitConfig;
@@ -87,6 +89,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -97,6 +100,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+
+import static com.example.huiyiqiandaotv.MyApplication.TIMEOUT;
 
 
 public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
@@ -136,7 +141,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //	private TanChuangBeanDao tanChuangBeanDao=null;
 	private Typeface typeFace1;
 	private RelativeLayout tops_rl;
-	private TextView y1,n1;
+	//private TextView y1,n1;
 	private String zhanghuID=null,huiyiID=null;
 	protected Handler mainHandler;
 	private String appId = "10588094";
@@ -442,11 +447,11 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 	}
 
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//	Log.d(TAG, "创建111");
-
 		benDiRenShuBeanDao= MyApplication.myApplication.getDaoSession().getBenDiRenShuBeanDao();
 		benDiRenShuBean=benDiRenShuBeanDao.load(123456L);
 		if (benDiRenShuBean==null){
@@ -1299,9 +1304,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 				}
 				if (intent.getAction().equals("gxshipingdizhi")) {
 					//更新视频流地址
-					//Log.d(TAG, "收到更新地址广播");
-					String a = intent.getStringExtra("gxsp");
-					String b = intent.getStringExtra("gxzj");
+					TastyToast.makeText(YiDongNianHuiActivity.this,intent.getStringExtra("date"),TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
 
 				}
 				if (intent.getAction().equals("shoudongshuaxin")) {
@@ -1920,61 +1923,6 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 
 
-//
-//	private void link_houtai(User zhaoPianBean) {
-//		//final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
-//		//http://192.168.2.4:8080/sign?cmd=getUnSignList&subjectId=jfgsdf
-//		OkHttpClient okHttpClient= new OkHttpClient();
-//
-//		RequestBody body = new FormBody.Builder()
-//				.add("cmd","addSign")
-//				.add("subjectId",zhaoPianBean.getId()+"")
-//				.add("subjectPhoto",zhaoPianBean.getPhotos().get(0).getUrl())
-//				.build();
-//		Request.Builder requestBuilder = new Request.Builder()
-//				.header("Content-Type", "application/json")
-//				.post(body)
-//				.url("http://192.168.2.17:8080/sign");
-//
-//		// step 3：创建 Call 对象
-//		Call call = okHttpClient.newCall(requestBuilder.build());
-//
-//		//step 4: 开始异步请求
-//		call.enqueue(new Callback() {
-//			@Override
-//			public void onFailure(Call call, IOException e) {
-//				Log.d("AllConnects", "请求添加陌生人失败"+e.getMessage());
-//			}
-//
-//			@Override
-//			public void onResponse(Call call, Response response) throws IOException {
-//				Log.d("AllConnects", "请求添加陌生人成功"+call.request().toString());
-//				//获得返回体
-//				try {
-//
-//				ResponseBody body = response.body();
-//			//	Log.d("AllConnects", "aa   "+response.body().string());
-//
-//				JsonObject jsonObject= GsonUtil.parse(body.string()).getAsJsonObject();
-//				Gson gson=new Gson();
-//				int code=jsonObject.get("resultCode").getAsInt();
-//				if (code==0){
-//
-////					JsonObject array=jsonObject.get("data").getAsJsonObject();
-////					User zhaoPianBean=gson.fromJson(array,User.class);
-////					link_houtai(zhaoPianBean);
-//					//link_gengxing_erweima();
-//				}
-//
-//				}catch (Exception e){
-//					Log.d("WebsocketPushMsg", e.getMessage());
-//				}
-//			}
-//		});
-//
-//
-//		}
-
 	public class NetWorkStateReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -2001,17 +1949,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 					wangluo.setVisibility(View.VISIBLE);
 				}
 
-
-//				if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
-//					Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
-//				} else if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
-//					Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
-//				} else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
-//					Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
-//				} else {
-//					Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
-//				}
-//API大于23时使用下面的方式进行网络监听
+			//API大于23时使用下面的方式进行网络监听
 			}else {
 
 				Log.d(TAG, "API23");
@@ -2215,7 +2153,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 								for (char c:s1){
 									cc.append(String.valueOf(c)).append(" ");
 								}
-								y1.setText(cc.toString());
+							//	y1.setText(cc.toString());
 
 //								y2.setText(benDiRenShuBean.getYShen()+"");
 //								y3.setText(benDiRenShuBean.getYShi()+"");
@@ -2227,7 +2165,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 								for (char c:s2){
 									cc2.append(String.valueOf(c)).append(" ");
 								}
-								n1.setText(cc2.toString());
+								//n1.setText(cc2.toString());
 
 //								n2.setText(benDiRenShuBean.getNShen()+"");
 //								n3.setText(benDiRenShuBean.getNShi()+"");
@@ -2239,19 +2177,6 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 						});
 					}
 
-
-				//	Gson gson=new Gson();
-					//int code=jsonObject.get("code").getAsInt();
-
-				//	if (code==0){
-
-				//	link_getAll_User();
-
-				//	}
-
-			//	}catch (Exception e){
-				//	Log.d("WebsocketPushMsg", e.getMessage()+"ttttt");
-			//	}
 
 			}
 		});
@@ -2378,7 +2303,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							for (char c:s1){
 								cc.append(String.valueOf(c)).append(" ");
 							}
-							y1.setText(cc.toString());
+//							y1.setText(cc.toString());
 
 
 							String str2 = String.format("%04d", renShu.getTjOutPeople());
@@ -2387,7 +2312,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							for (char c:s2){
 								cc2.append(String.valueOf(c)).append(" ");
 							}
-							n1.setText(cc2.toString());
+					//		n1.setText(cc2.toString());
 
 						}
 					});
@@ -2400,234 +2325,5 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 			}
 		});
 	}
-
-//	private class DownloadReceiver extends ResultReceiver {
-//		public DownloadReceiver(Handler handler) {
-//			super(handler);
-//		}
-//		@Override
-//		protected void onReceiveResult(int resultCode, Bundle resultData) {
-//			super.onReceiveResult(resultCode, resultData);
-//			if (resultCode == DownloadService.UPDATE_PROGRESS) {
-//				String ididid=resultData.getString("ididid2");
-//				int progress = resultData.getInt("progress");
-//
-//				if (progress == 100) {
-//					try {
-//
-//						//下载完成
-//						//更新状态
-//						Log.d(TAG, "ididididididd值："+ididid);
-//						if (ididid!=null) {
-//							ShiPingBean b = shiPingBeanDao.load(ididid);
-//							b.setIsDownload(true);
-//							shiPingBeanDao.update(b);
-//
-//							if (shiPingBeanList.size() > 0) {
-//								shiPingBeanList.clear();
-//							}
-//							shiPingBeanList = shiPingBeanDao.loadAll();
-//
-//							ijkVideoView.setVideoPath(Environment.getExternalStorageDirectory() + File.separator + "linhefile" + File.separator + b.getId() + "." + b.getVideoType().split("\\/")[1]);
-//							ijkVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-//								@Override
-//								public void onPrepared(IMediaPlayer iMediaPlayer) {
-//									ijkVideoView.start();
-//								}
-//							});
-//						}else {
-//							Log.d(TAG, "id的值是空");
-//						}
-//
-//					}catch (Exception e){
-//						Log.d(TAG, "捕捉到异常onReceiveResult"+e.getMessage());
-//					}
-//
-//					//ijkVideoView.setVideoPath(mFile.getPath());
-//					//ijkVideoView.start();
-////					Intent install = new Intent();
-////					install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-////					install.setAction(android.content.Intent.ACTION_VIEW);
-////					install.setDataAndType(Uri.fromFile(mFile),"application/vnd.android.package-archive");
-////					startActivity(install);  //下载完成打开APK
-//				}
-//			}
-//		}
-//	}
-
-//	private class DownloadReceiverTuPian extends ResultReceiver {
-//		public DownloadReceiverTuPian(Handler handler) {
-//			super(handler);
-//		}
-//		@Override
-//		protected void onReceiveResult(int resultCode, Bundle resultData) {
-//			super.onReceiveResult(resultCode, resultData);
-//			if (resultCode == DownloadTuPianService.UPDATE_PROGRESS2) {
-//				int progress = resultData.getInt("progress");
-//
-//				if (progress == 100) {
-//					try {
-//						//下载完成
-//						// Environment.getExternalStorageDirectory()+ File.separator+"linhefile"+File.separator+"tupian111.jpg"
-//						Log.d(TAG, "图片下载完成");
-//
-//					}catch (Exception e){
-//						Log.d(TAG, "捕捉到异常onReceiveResult"+e.getMessage());
-//					}
-//
-//				}
-//			}
-//		}
-//	}
-
-//	public static final int TIMEOUT = 1000 * 60;
-//	private void link_chengshi() {
-//		//final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
-//		//http://192.168.2.4:8080/sign?cmd=getUnSignList&subjectId=jfgsdf
-//		OkHttpClient okHttpClient= new OkHttpClient.Builder()
-//				.writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-//				.connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-//				.readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-//				.retryOnConnectionFailure(true)
-//				.build();
-//
-////		RequestBody body = new FormBody.Builder()
-////				.add("cityCode","101040100")
-////				.add("weatherType","1")
-////				.build();
-//
-//		Request.Builder requestBuilder = new Request.Builder()
-//				//.header("Content-Type", "application/json")
-//				.get()
-//				.url("http://api.map.baidu.com/location/ip?ak=uTTmEt0NeHSsgAKsXGLAMC8mvg6zPNLm" +
-//						"&mcode=21:21:DA:F2:00:51:3B:AB:C4:E6:19:18:31:C6:98:CA:D6:7B:44:AE;com.example.huiyiqiandaotv");
-//		//.url("http://wthrcdn.etouch.cn/weather_mini?city=广州市");
-//
-//		// step 3：创建 Call 对象
-//		Call call = okHttpClient.newCall(requestBuilder.build());
-//
-//		//step 4: 开始异步请求
-//		call.enqueue(new Callback() {
-//			@Override
-//			public void onFailure(Call call, IOException e) {
-//				Log.d("AllConnects", "请求添加陌生人失败"+e.getMessage());
-//			}
-//
-//			@Override
-//			public void onResponse(Call call, Response response) throws IOException {
-//				Log.d("AllConnects", "请求添加陌生人成功"+call.request().toString());
-//				//获得返回体
-//				try {
-//
-//					ResponseBody body = response.body();
-//				//	Log.d("AllConnects", "aa   "+response.body().string());
-//
-//					JsonObject jsonObject= GsonUtil.parse(body.string()).getAsJsonObject();
-//					Gson gson=new Gson();
-//				//	JsonObject object=jsonObject.get("ContentBean").getAsJsonObject();
-//
-//					IpAddress zhaoPianBean=gson.fromJson(jsonObject,IpAddress.class);
-//
-//
-//					/**从assets中读取txt
-//					 * 按行读取txt
-//					 * @param
-//					 * @return
-//					 * @throws Exception
-//					 */
-//
-//						InputStream is = getAssets().open("tianqi.txt");
-//						InputStreamReader reader = new InputStreamReader(is);
-//						BufferedReader bufferedReader = new BufferedReader(reader);
-//						//StringBuffer buffer = new StringBuffer("");
-//						String str;
-//						String aa=zhaoPianBean.getContent().getAddress_detail().getCity();
-//						if (aa.length()>2){
-//							aa=aa.substring(0,2);
-//						//	Log.d("VlcVideoActivity", "fffff9"+aa);
-//						}
-//						while ((str = bufferedReader.readLine()) != null) {
-//
-//
-//							if (str.contains(aa)){
-//								//Log.d("VlcVideoActivity", "fffff3"+str);
-//								link_tianqi(str);
-//								break;
-//							}
-//						}
-//
-//				}catch (Exception e){
-//					Log.d("WebsocketPushMsg", e.getMessage());
-//				}
-//			}
-//		});
-//
-//
-//	}
-
-//	private void link_tianqi(String bean) {
-//		//final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
-//		//http://192.168.2.4:8080/sign?cmd=getUnSignList&subjectId=jfgsdf
-//		OkHttpClient okHttpClient= new OkHttpClient.Builder()
-//				.writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-//				.connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-//				.readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-//				.retryOnConnectionFailure(true)
-//				.build();
-////		RequestBody body = new FormBody.Builder()
-////				.add("cityCode","101040100")
-////				.add("weatherType","1")
-////				.build();
-//
-//		Request.Builder requestBuilder = new Request.Builder()
-//				//.header("Content-Type", "application/json")
-//				.get()
-//				//.url("https://api.map.baidu.com/location/ip?ak=uTTmEt0NeHSsgAKsXGLAMC8mvg6zPNLm" +
-//					//	"&mcode=21:21:DA:F2:00:51:3B:AB:C4:E6:19:18:31:C6:98:CA:D6:7B:44:AE;com.example.huiyiqiandaotv");
-//
-//				.url("http://wthrcdn.etouch.cn/weather_mini?citykey=" + bean.substring(bean.length() - 9, bean.length()));
-//
-//		// step 3：创建 Call 对象
-//		Call call = okHttpClient.newCall(requestBuilder.build());
-//
-//		//step 4: 开始异步请求
-//		call.enqueue(new Callback() {
-//			@Override
-//			public void onFailure(Call call, IOException e) {
-//				Log.d("AllConnects", "请求添加陌生人失败"+e.getMessage());
-//			}
-//
-//			@Override
-//			public void onResponse(Call call, Response response) throws IOException {
-//				Log.d("AllConnects", "请求天气成功"+call.request().toString());
-//				//获得返回体
-//				try {
-//
-//					ResponseBody body = response.body();
-//					//Log.d("AllConnects", "aa   "+response.body().string());
-//
-//					JsonObject jsonObject= GsonUtil.parse(body.string()).getAsJsonObject();
-//					Gson gson=new Gson();
-//					//JsonObject object=jsonObject.get("ContentBean").getAsJsonObject();
-//
-//					final TianQiBean zhaoPianBean=gson.fromJson(jsonObject,TianQiBean.class);
-//					runOnUiThread(new Runnable() {
-//						@Override
-//						public void run() {
-//							tianqi0.setText(zhaoPianBean.getData().getCity());
-//							tianqi1.setText(zhaoPianBean.getData().getWendu()+" 度");
-//						//	tianqi2.setText(zhaoPianBean.getData().getGanmao());
-//						}
-//					});
-//
-//
-//				}catch (Exception e){
-//					Log.d("WebsocketPushMsg", e.getMessage());
-//				}
-//			}
-//		});
-//
-//
-//	}
 
 }

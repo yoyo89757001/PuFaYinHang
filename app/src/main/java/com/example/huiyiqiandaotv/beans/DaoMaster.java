@@ -25,9 +25,10 @@ public class DaoMaster extends AbstractDaoMaster {
         BenDiRenShuBeanDao.createTable(db, ifNotExists);
         MoShengRenBeanDao.createTable(db, ifNotExists);
         QianDaoIdDao.createTable(db, ifNotExists);
-        ShiBieJiLuBeanDao.createTable(db, ifNotExists);
-        ShiPingBeanDao.createTable(db, ifNotExists);
+        RenYuanInFoDao.createTable(db, ifNotExists);
+        SheBeiInFoBeanDao.createTable(db, ifNotExists);
         TanChuangBeanDao.createTable(db, ifNotExists);
+        ZhuJiBeanHDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -36,9 +37,10 @@ public class DaoMaster extends AbstractDaoMaster {
         BenDiRenShuBeanDao.dropTable(db, ifExists);
         MoShengRenBeanDao.dropTable(db, ifExists);
         QianDaoIdDao.dropTable(db, ifExists);
-        ShiBieJiLuBeanDao.dropTable(db, ifExists);
-        ShiPingBeanDao.dropTable(db, ifExists);
+        RenYuanInFoDao.dropTable(db, ifExists);
+        SheBeiInFoBeanDao.dropTable(db, ifExists);
         TanChuangBeanDao.dropTable(db, ifExists);
+        ZhuJiBeanHDao.dropTable(db, ifExists);
     }
 
     /**
@@ -61,9 +63,10 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(BenDiRenShuBeanDao.class);
         registerDaoClass(MoShengRenBeanDao.class);
         registerDaoClass(QianDaoIdDao.class);
-        registerDaoClass(ShiBieJiLuBeanDao.class);
-        registerDaoClass(ShiPingBeanDao.class);
+        registerDaoClass(RenYuanInFoDao.class);
+        registerDaoClass(SheBeiInFoBeanDao.class);
         registerDaoClass(TanChuangBeanDao.class);
+        registerDaoClass(ZhuJiBeanHDao.class);
     }
 
     public DaoSession newSession() {
