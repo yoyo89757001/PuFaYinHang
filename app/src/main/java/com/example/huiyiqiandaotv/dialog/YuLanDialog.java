@@ -80,9 +80,8 @@ public class YuLanDialog extends Dialog  {
                 try {
 
                     if (mediaPlayer != null) {
-                       // Log.d("dddddd", baoCunBean.getShipingIP() + "gggg");
-
-                        media = new Media(libvlc, Uri.parse("rtsp://" + baoCunBean.getShipingIP() + "/user=admin&password=&channel=1&stream=0.sdp"));
+                      //  Log.d("dddddd", baoCunBean.getShipingIP() + "gggg");
+                        media = new Media(libvlc, Uri.parse(baoCunBean.getShipingIP()));
                         mediaPlayer.setMedia(media);
                         mediaPlayer.play();
 
