@@ -752,8 +752,9 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 		}catch (Exception e){
 			Log.d(TAG, e.getMessage());
-			synthesizer.release();
-			synthesizer = new NonBlockSyntherizer(this, initConfig, mainHandler); // 此处可以改为MySyntherizer 了解调用过程
+//			if (synthesizer!=null)
+//			synthesizer.release();
+//			synthesizer = new NonBlockSyntherizer(this, initConfig, mainHandler); // 此处可以改为MySyntherizer 了解调用过程
 
 		}
 
@@ -1300,7 +1301,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 						WebsocketPushMsg websocketPushMsg = new WebsocketPushMsg();
 						websocketPushMsg.close();
 						if (baoCunBean.getZhujiDiZhi() != null && baoCunBean.getShipingIP() != null) {
-							websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), "rtsp://"+baoCunBean.getShipingIP()+":554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream");
+							websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), baoCunBean.getShipingIP());
 						}
 
 
@@ -1323,7 +1324,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							WebsocketPushMsg websocketPushMsg = new WebsocketPushMsg();
 							websocketPushMsg.close();
 							if (baoCunBean.getShipingIP() != null && baoCunBean.getZhujiDiZhi() != null) {
-								websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), "rtsp://"+baoCunBean.getShipingIP()+":554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream");
+								websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), baoCunBean.getShipingIP());
 							}
 						} catch (Exception e) {
 							Log.d(TAG, e.getMessage()+"fghj");
@@ -1464,7 +1465,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 				WebsocketPushMsg websocketPushMsg = new WebsocketPushMsg();
 				websocketPushMsg.close();
 				if (baoCunBean.getShipingIP() != null ) {
-					websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), "rtsp://"+baoCunBean.getShipingIP()+":554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream");
+					websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), baoCunBean.getShipingIP());
 				}
 			} catch (URISyntaxException e) {
 				Log.d(TAG, e.getMessage()+"ddd");

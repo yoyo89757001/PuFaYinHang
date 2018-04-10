@@ -20,7 +20,6 @@ import com.example.huiyiqiandaotv.beans.BaoCunBean;
 import com.example.huiyiqiandaotv.beans.BaoCunBeanDao;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBean;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBeanDao;
-import com.example.huiyiqiandaotv.beans.QianDaoId;
 import com.example.huiyiqiandaotv.beans.QianDaoIdDao;
 import com.example.huiyiqiandaotv.beans.RenShu;
 import com.example.huiyiqiandaotv.dialog.MoBanDialog;
@@ -512,25 +511,23 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                         //弹窗
                         final XiuGaiHouTaiDialog dialog=new XiuGaiHouTaiDialog(SheZhiActivity.this);
                         if (baoCunBean.getHoutaiDiZhi()==null && baoCunBean.getGuanggaojiMing()==null){
-                            dialog.setContents("http://192.168.2.120:8080","广告机1");
+                            dialog.setContents("http://192.168.2.120:8080","广告机1","10000011");
                         }else {
-                            dialog.setContents(baoCunBean.getHoutaiDiZhi(),baoCunBean.getGuanggaojiMing());
+                            dialog.setContents(baoCunBean.getHoutaiDiZhi(),baoCunBean.getGuanggaojiMing(),baoCunBean.getZhanghuId());
                         }
                         dialog.setOnQueRenListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 baoCunBean.setHoutaiDiZhi(dialog.getContents());
                                 baoCunBean.setGuanggaojiMing(dialog.getGuangGaoJiMing());
+                                baoCunBean.setZhanghuId(dialog.getZhangHuId());
                                 baoCunBeanDao.update(baoCunBean);
                                 baoCunBean=baoCunBeanDao.load(123456L);
-                                if (baoCunBean.getZhanghuId()!=null && !baoCunBean.getZhanghuId().equals("")){
+                                try {
                                     link_login();
-
-                                }else {
-
-                                    TastyToast.makeText(SheZhiActivity.this,"请先设置账户id",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+                                }catch (Exception e){
+                                    Log.d("SheZhiActivity", e.getMessage());
                                 }
-
 
                                 dialog.dismiss();
 

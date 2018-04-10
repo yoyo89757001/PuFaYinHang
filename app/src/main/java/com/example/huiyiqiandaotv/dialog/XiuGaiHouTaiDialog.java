@@ -23,9 +23,9 @@ import com.example.huiyiqiandaotv.R;
  * @author Tom.Cai
  */
 public class XiuGaiHouTaiDialog extends Dialog implements View.OnFocusChangeListener {
-    private TextView title2;
+   // private TextView title2;
     private Button l1,l2;
-    private EditText shanchu,shanchu2;
+    private EditText shanchu,shanchu2,shanchu3;
 
     public XiuGaiHouTaiDialog(Context context) {
         super(context, R.style.dialog_style2);
@@ -46,7 +46,8 @@ public class XiuGaiHouTaiDialog extends Dialog implements View.OnFocusChangeList
 
         shanchu= (EditText) mView.findViewById(R.id.xiangce);
         shanchu2= (EditText) mView.findViewById(R.id.xiangce2);
-        title2= (TextView) mView.findViewById(R.id.title2);
+        shanchu3= (EditText) mView.findViewById(R.id.xiangce3);
+        //title2= (TextView) mView.findViewById(R.id.title2);
         l1= (Button)mView. findViewById(R.id.queren);
         l2= (Button) mView.findViewById(R.id.quxiao);
         l1.setOnFocusChangeListener(this);
@@ -54,9 +55,10 @@ public class XiuGaiHouTaiDialog extends Dialog implements View.OnFocusChangeList
         super.setContentView(mView);
     }
 
-    public void setContents(String ss, String s3){
+    public void setContents(String ss, String s3,String s4){
         shanchu.setText(ss);
         shanchu2.setText(s3);
+        shanchu3.setText(s4);
     }
 
     public String getContents(){
@@ -64,9 +66,16 @@ public class XiuGaiHouTaiDialog extends Dialog implements View.OnFocusChangeList
         return shanchu.getText().toString().trim();
 
     }
+
     public String getGuangGaoJiMing(){
 
         return shanchu2.getText().toString().trim();
+
+    }
+
+    public String getZhangHuId(){
+
+        return shanchu3.getText().toString().trim();
 
     }
 

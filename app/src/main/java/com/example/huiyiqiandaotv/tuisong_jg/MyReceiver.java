@@ -77,7 +77,7 @@ public class MyReceiver extends BroadcastReceiver {
 	private SheBeiInFoBeanDao sheBeiInFoBeanDao=null;
 	private SheBeiInFoBean sheBeiInFoBean=null;
 	private RenYuanInFoDao renYuanInFoDao=null;
-
+	private boolean isA=true;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -232,6 +232,15 @@ public class MyReceiver extends BroadcastReceiver {
 					JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
 					Gson gson=new Gson();
 					ZhuJiBeanH zhaoPianBean=gson.fromJson(jsonObject,ZhuJiBeanH.class);
+					//ws://192.168.2.58:9000/video
+					String s1=zhaoPianBean.getHostUrl();
+					if (s1.contains("//")){
+						String s=s1.split("//")[1];
+						baoCunBean.setTouxiangzhuji(zhaoPianBean.getHostUrl()+"/");
+						baoCunBean.setZhujiDiZhi("ws://"+s+":9000/video");
+						baoCunBeanDao.update(baoCunBean);
+					}
+
 					zhuJiBeanHDao.deleteAll();
 					zhuJiBeanHDao.insert(zhaoPianBean);
 				}catch (Exception e){
@@ -283,6 +292,8 @@ public class MyReceiver extends BroadcastReceiver {
 					JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
 					Gson gson=new Gson();
 					SheBeiInFoBean zhaoPianBean=gson.fromJson(jsonObject,SheBeiInFoBean.class);
+					baoCunBean.setShipingIP(zhaoPianBean.getCamera_address());
+
 					//保存到本地
 					if (sheBeiInFoBeanDao.load(zhaoPianBean.getId())==null){
 						//新增
@@ -1138,8 +1149,13 @@ public class MyReceiver extends BroadcastReceiver {
 
 					}else {
 
-						int jishu=0;
-						XiaZaiTuPian(context,renYuanInFoList.get(jishu),jishu,size);
+						for (int i=0;i<size;i++){
+							isA=true;
+							XiaZaiTuPian(context,renYuanInFoList.get(i));
+							while (isA){
+								Log.d(TAG, "q");
+							}
+						}
 
 					}
 
@@ -1230,8 +1246,9 @@ public class MyReceiver extends BroadcastReceiver {
 		call.enqueue(new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {
-				link_XiuGaiRenYuan(MyApplication.okHttpClient,context,zhuJiBeanH,renYuanInFo,0);
+				link_addPiLiangRenYuan(MyApplication.okHttpClient,context,zhuJiBeanH,renYuanInFo,0);
 				Log.d("AllConnects", "请求识别失败" + e.getMessage());
+
 			}
 
 			@Override
@@ -1261,7 +1278,7 @@ public class MyReceiver extends BroadcastReceiver {
 		});
 	}
 
-	private void XiaZaiTuPian(Context context,RenYuanInFo renYuanInFo,int jishu,int size){
+	private void XiaZaiTuPian(Context context,RenYuanInFo renYuanInFo){
 
 		Bitmap bitmap=null;
 		try {
@@ -1332,7 +1349,7 @@ public class MyReceiver extends BroadcastReceiver {
 		call.enqueue(new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {
-
+					isA=false;
 				Log.d("AllConnects", "请求失败"+e.getMessage());
 			}
 
@@ -1343,7 +1360,7 @@ public class MyReceiver extends BroadcastReceiver {
 				try{
 					ResponseBody body = response.body();
 					String ss=body.string().trim();
-					Log.d("AllConnects", "创建人员"+ss);
+					Log.d("AllConnects", "批量创建人员"+ss);
 					JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
 					if (jsonObject.get("code").getAsInt()==0){
 						JsonObject jo=jsonObject.get("data").getAsJsonObject();
@@ -1353,6 +1370,7 @@ public class MyReceiver extends BroadcastReceiver {
 				}catch (Exception e){
 					Log.d("WebsocketPushMsg", e.getMessage()+"gggg");
 				}
+				isA=false;
 
 			}
 		});
