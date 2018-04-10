@@ -747,7 +747,15 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 		Map<String, String> params = getParams();
 		// appId appKey secretKey 网站上您申请的应用获取。注意使用离线合成功能的话，需要应用中填写您app的包名。包名在build.gradle中获取。
 		InitConfig initConfig = new InitConfig(appId, appKey, secretKey, ttsMode, params, listener);
-		synthesizer = new NonBlockSyntherizer(this, initConfig, mainHandler); // 此处可以改为MySyntherizer 了解调用过程
+		try {
+			synthesizer = new NonBlockSyntherizer(this, initConfig, mainHandler); // 此处可以改为MySyntherizer 了解调用过程
+
+		}catch (Exception e){
+			Log.d(TAG, e.getMessage());
+			synthesizer.release();
+			synthesizer = new NonBlockSyntherizer(this, initConfig, mainHandler); // 此处可以改为MySyntherizer 了解调用过程
+
+		}
 
 	}
 
@@ -1494,6 +1502,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 		Intent intent1=new Intent("guanbi333"); //关闭监听服务
 		sendBroadcast(intent1);
+		if (synthesizer!=null)
 		synthesizer.release();
 		handler.removeCallbacksAndMessages(null);
 		if (myReceiver != null)
