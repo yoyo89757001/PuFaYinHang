@@ -24,7 +24,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,8 +49,6 @@ import com.example.huiyiqiandaotv.beans.ShiBieBean;
 import com.example.huiyiqiandaotv.beans.ShiShiRenShuBean;
 import com.example.huiyiqiandaotv.beans.TanChuangBean;
 import com.example.huiyiqiandaotv.beans.WBBean;
-import com.example.huiyiqiandaotv.beans.ZhuJiBeanH;
-import com.example.huiyiqiandaotv.cookies.CookiesManager;
 import com.example.huiyiqiandaotv.interfaces.RecytviewCash;
 import com.example.huiyiqiandaotv.service.AlarmReceiver;
 import com.example.huiyiqiandaotv.tts.control.InitConfig;
@@ -89,7 +86,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
+
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -101,7 +98,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import static com.example.huiyiqiandaotv.MyApplication.TIMEOUT;
 
 
 public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
@@ -141,7 +137,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //	private TanChuangBeanDao tanChuangBeanDao=null;
 	private Typeface typeFace1;
 	private RelativeLayout tops_rl;
-	//private TextView y1,n1;
+	private TextView y1,n1;
 	private String zhanghuID=null,huiyiID=null;
 	protected Handler mainHandler;
 	private String appId = "10588094";
@@ -501,45 +497,45 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 		dabg= (ImageView) findViewById(R.id.dabg);
 		link_bgbg= (TextView) findViewById(R.id.bgbg);
-		//liucheng= (TextView) findViewById(R.id.liucheng);
+		liucheng= (TextView) findViewById(R.id.liucheng);
 		tops_rl= (RelativeLayout) findViewById(R.id.top_rl);
 		wangluo = (LottieAnimationView) findViewById(R.id.wangluo);
 		wangluo.setSpeed(1.8f);
-//		t1= (TextView) findViewById(R.id.t1);
-//		t2= (TextView) findViewById(R.id.t2);
-//		typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/xk.TTF");
-//		t1.setTypeface(typeFace1);
+		t1= (TextView) findViewById(R.id.t1);
+		t2= (TextView) findViewById(R.id.t2);
+		typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/xk.TTF");
+		t1.setTypeface(typeFace1);
 //		liucheng.setTypeface(typeFace1);
-//		if (baoCunBean.getWenzi1()!=null){
-//			t1.setText(baoCunBean.getWenzi1());
-//			if (baoCunBean.getSize1()!=0){
-//				t1.setTextSize(baoCunBean.getSize1());
-//			}
-//		}
-//		t2.setTypeface(typeFace1);
-//		if (baoCunBean.getWenzi()!=null){
-//			t2.setText(baoCunBean.getWenzi());
-//			if (baoCunBean.getSize()!=0){
-//				t2.setTextSize(baoCunBean.getSize());
-//			}
-//		}
+		if (baoCunBean.getWenzi1()!=null){
+			t1.setText(baoCunBean.getWenzi1());
+			if (baoCunBean.getSize1()!=0){
+				t1.setTextSize(baoCunBean.getSize1());
+			}
+		}
+		t2.setTypeface(typeFace1);
+		if (baoCunBean.getWenzi()!=null){
+			t2.setText(baoCunBean.getWenzi());
+			if (baoCunBean.getSize()!=0){
+				t2.setTextSize(baoCunBean.getSize());
+			}
+		}
 
-//		y1= (TextView) findViewById(R.id.y1);
+		y1= (TextView) findViewById(R.id.y1);
 //		y2= (TextView) findViewById(R.id.y2);
 //		y3= (TextView) findViewById(R.id.y3);
 //		y4= (TextView) findViewById(R.id.y4);
-//		n1= (TextView) findViewById(R.id.n1);
+		n1= (TextView) findViewById(R.id.n1);
 //		n2= (TextView) findViewById(R.id.n2);
 //		n3= (TextView) findViewById(R.id.n3);
 //		n4= (TextView) findViewById(R.id.n4);
 
-//		String str = String.format("%04d", benDiRenShuBean.getY1());
-//		char s1[]=str.toCharArray();
-//		StringBuilder cc=new StringBuilder();
-//		for (char c:s1){
-//			cc.append(String.valueOf(c)).append(" ");
-//		}
-//		y1.setText(cc.toString());
+		String str = String.format("%04d", benDiRenShuBean.getY1());
+		char s1[]=str.toCharArray();
+		StringBuilder cc=new StringBuilder();
+		for (char c:s1){
+			cc.append(String.valueOf(c)).append(" ");
+		}
+		y1.setText(cc.toString());
 
 		link_bgbg.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -559,13 +555,13 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //		y3.setText(benDiRenShuBean.getYShi()+"");
 //		y4.setText(benDiRenShuBean.getYTeyao()+"");
 
-//		String str2 = String.format("%04d", benDiRenShuBean.getN1());
-//		char s2[]=str2.toCharArray();
-//		StringBuilder cc2=new StringBuilder();
-//		for (char c:s2){
-//			cc2.append(String.valueOf(c)).append(" ");
-//		}
-//		n1.setText(cc2.toString());
+		String str2 = String.format("%04d", benDiRenShuBean.getN1());
+		char s2[]=str2.toCharArray();
+		StringBuilder cc2=new StringBuilder();
+		for (char c:s2){
+			cc2.append(String.valueOf(c)).append(" ");
+		}
+		n1.setText(cc2.toString());
 
 //		n2.setText(benDiRenShuBean.getNShen()+"");
 //		n3.setText(benDiRenShuBean.getNShi()+"");
@@ -728,9 +724,6 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 			link_bg();
 			link_shishi_renshu();
 		}
-
-
-
 	}
 
 	/**
@@ -880,7 +873,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							name.setTypeface(typeFace1);
 							zhuangtai.setTypeface(typeFace1);
 							name.setText(item.getName());
-							zhuangtai.setText("欢迎会议代表莅临");
+							zhuangtai.setText("欢迎会议代表莅临\n你的座位号是:"+item.getZhiwei());
 							imageView.setBackgroundResource(R.drawable.yuanquan);
 							synthesizer.speak(item.getName()+"，欢迎会议代表莅临");
 							if (qianDaoIdDao.load(Long.parseLong(item.getGonghao()))!=null && qianDaoIdDao.load(Long.parseLong(item.getGonghao())).getIsQd()){
@@ -1312,11 +1305,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 						}
 				}
 				if (intent.getAction().equals("gxshipingdizhi")) {
-					//更新视频流地址
-					TastyToast.makeText(YiDongNianHuiActivity.this,intent.getStringExtra("date"),TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
-
-				}
-				if (intent.getAction().equals("shoudongshuaxin")) {
+					//重新开启刷脸监听
 					baoCunBean=baoCunBeanDao.load(123456L);
 					if (baoCunBean.getShipingIP() != null && baoCunBean.getZhujiDiZhi() != null) {
 
@@ -1331,6 +1320,11 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 						}
 
 					}
+				}
+
+				if (intent.getAction().equals("shoudongshuaxin")) {
+
+
 				}
 
 				if (intent.getAction().equals("guanbi")){
@@ -1686,7 +1680,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 										if (baoCunBean.getHoutaiDiZhi()!=null && !baoCunBean.getHoutaiDiZhi().equals("") && zhanghuID!=null && !zhanghuID.equals("") && huiyiID!=null && !huiyiID.equals("")){
 											link_fasong(dataBean.getPerson().getAvatar(),dataBean.getData().getTimestamp()
 													,dataBean.getPerson().getId(),dataBean.getPerson().getName(),dataBean.getScreen().getCamera_position());
-											link_getAll_User(dataBean.getPerson().getId());
+											link_getAll_User(dataBean.getPerson().getJob_number());
 
 //										switch (dataBean.getPerson().getDepartment()) {
 //											case "省公司领导":
@@ -1991,7 +1985,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 	}
 
 
-	private void link_getAll_User(long id){
+	private void link_getAll_User(String id){
 
 		final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
 
@@ -2009,7 +2003,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 				.header("Content-Type", "application/json")
 				//.post(requestBody)
 				.get()
-				.url(baoCunBean.getHoutaiDiZhi()+"/subjectSign.do?conferenceId="+baoCunBean.getHuiyiId()+"&subjectId="+id);
+				.url(baoCunBean.getHoutaiDiZhi()+"/subjectSign.do?conferenceId="+baoCunBean.getHuiyiId()+"&subjectId="+id+"&screenId="+baoCunBean.getShiPingWeiZhi());
 
 		// step 3：创建 Call 对象
 		Call call = okHttpClient.newCall(requestBuilder.build());
@@ -2163,8 +2157,8 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 								for (char c:s1){
 									cc.append(String.valueOf(c)).append(" ");
 								}
-							//	y1.setText(cc.toString());
 
+							//	y1.setText(cc.toString());
 //								y2.setText(benDiRenShuBean.getYShen()+"");
 //								y3.setText(benDiRenShuBean.getYShi()+"");
 //								y4.setText(benDiRenShuBean.getYTeyao()+"");
@@ -2244,7 +2238,6 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							liucheng.setText(renShu.getConference_flow());
 							Glide.with(YiDongNianHuiActivity.this)
 									.load(baoCunBean.getHoutaiDiZhi()+"/upload/background/"+renShu.getBackground())
-
 									//.load("http://121.46.3.20"+item.getTouxiang())
 									//.apply(myOptions)
 									//.transform(new GlideCircleTransform(MyApplication.getAppContext(),2,Color.parseColor("#ffffffff")))
@@ -2313,8 +2306,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							for (char c:s1){
 								cc.append(String.valueOf(c)).append(" ");
 							}
-//							y1.setText(cc.toString());
-
+							y1.setText(cc.toString());
 
 							String str2 = String.format("%04d", renShu.getTjOutPeople());
 							char s2[]=str2.toCharArray();
@@ -2322,7 +2314,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							for (char c:s2){
 								cc2.append(String.valueOf(c)).append(" ");
 							}
-					//		n1.setText(cc2.toString());
+							n1.setText(cc2.toString());
 
 						}
 					});

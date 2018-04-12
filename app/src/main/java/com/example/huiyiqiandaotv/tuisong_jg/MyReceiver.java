@@ -119,7 +119,12 @@ public class MyReceiver extends BroadcastReceiver {
 						break;
 					case "人员列表管理":
 						//先从老黄哪里拿批量人员数据。
+						baoCunBean.setHuiyiId(renShu.getContent().getId()+"");
+						baoCunBeanDao.update(baoCunBean);
 						link_getHouTaiPiLiang(renShu.getContent().getId(),context,renShu.getContent().getStatus());
+
+						Intent intent2=new Intent("gxshipingdizhi");
+						context.sendBroadcast(intent2);
 						break;
 
 				}
@@ -293,6 +298,8 @@ public class MyReceiver extends BroadcastReceiver {
 					Gson gson=new Gson();
 					SheBeiInFoBean zhaoPianBean=gson.fromJson(jsonObject,SheBeiInFoBean.class);
 					baoCunBean.setShipingIP(zhaoPianBean.getCamera_address());
+					baoCunBean.setShiPingWeiZhi(zhaoPianBean.getCamera_position());
+					baoCunBeanDao.update(baoCunBean);
 
 					//保存到本地
 					if (sheBeiInFoBeanDao.load(zhaoPianBean.getId())==null){
@@ -409,9 +416,7 @@ public class MyReceiver extends BroadcastReceiver {
 			mcall.enqueue(new Callback() {
 				@Override
 				public void onFailure(Call call, IOException e) {
-					Intent intent=new Intent("gxshipingdizhi");
-					intent.putExtra("date","登录失败");
-					context.sendBroadcast(intent);
+
 					Log.d(TAG, "登陆失败"+e.getMessage());
 				}
 
@@ -1007,6 +1012,8 @@ public class MyReceiver extends BroadcastReceiver {
 			}
 		});
 	}
+
+
 	//	<----------------------------------------------------------------------------------------------------------------------->
 	//批量人员操作
 
@@ -1131,7 +1138,7 @@ public class MyReceiver extends BroadcastReceiver {
 			public void onResponse(Call call, Response response) throws IOException {
 
 				String s=response.body().string();
-				Log.d(TAG, "123   "+s);
+				//Log.d(TAG, "123   "+s);
 				JsonObject jsonObject= GsonUtil.parse(s).getAsJsonObject();
 				int n=1;
 				n=jsonObject.get("code").getAsInt();
@@ -1140,20 +1147,22 @@ public class MyReceiver extends BroadcastReceiver {
 					MyApplication.okHttpClient=okHttpClient;
 					List<RenYuanInFo> renYuanInFoList=renYuanInFoDao.loadAll();
 					int size=renYuanInFoList.size();
+				//	Log.d("MyReceiver", "size:" + size);
 					if (status==3){
 						//删除
 						for (int i=0;i<size;i++){
-							SystemClock.sleep(400);
+							SystemClock.sleep(500);
 							link_ShanChuRenYuan2(okHttpClient,context,renYuanInFoList.get(i));
 						}
 
 					}else {
-
+					//	Log.d("MyReceiver", "图片-1");
 						for (int i=0;i<size;i++){
 							isA=true;
 							XiaZaiTuPian(context,renYuanInFoList.get(i));
 							while (isA){
-								Log.d(TAG, "q");
+								Log.d(TAG, "D");
+
 							}
 						}
 
@@ -1192,13 +1201,13 @@ public class MyReceiver extends BroadcastReceiver {
 
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
-				Log.d("AllConnects", "请求成功"+call.request().toString());
+				//Log.d("AllConnects", "请求成功"+call.request().toString());
 				//获得返回体
 				try{
 					ResponseBody body = response.body();
 					String ss=body.string().trim();
 					renYuanInFoDao.delete(renYuanInFo);
-					Log.d("AllConnects", "批量删除人员"+ss);
+					//Log.d("AllConnects", "批量删除人员"+ss);
 
 //					JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
 //					if (jsonObject.get("code").getAsInt()==0){
@@ -1247,39 +1256,42 @@ public class MyReceiver extends BroadcastReceiver {
 			@Override
 			public void onFailure(Call call, IOException e) {
 				link_addPiLiangRenYuan(MyApplication.okHttpClient,context,zhuJiBeanH,renYuanInFo,0);
-				Log.d("AllConnects", "请求识别失败" + e.getMessage());
-
+				//Log.d("AllConnects", "请求识别失败" + e.getMessage());
+				//Log.d("MyReceiver", "图片3");
 			}
 
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
 				file.delete();
-				Log.d("AllConnects", "请求识别成功" + call.request().toString());
+				//Log.d("AllConnects", "请求识别成功" + call.request().toString());
 				//获得返回体
 				try {
 					ResponseBody body = response.body();
 					String ss = body.string();
 
-					Log.d("AllConnects", "传照片" + ss);
+					//Log.d("AllConnects", "传照片" + ss);
 					int ii=0;
 					JsonObject jsonObject = GsonUtil.parse(ss).getAsJsonObject();
 					JsonObject jo=jsonObject.get("data").getAsJsonObject();
 					ii=jo.get("id").getAsInt();
 					if (ii!=0){
 						link_addPiLiangRenYuan(MyApplication.okHttpClient,context,zhuJiBeanH,renYuanInFo,ii);
+						//Log.d("MyReceiver", "图片4");
 					}else {
 						link_addPiLiangRenYuan(MyApplication.okHttpClient,context,zhuJiBeanH,renYuanInFo,0);
+						//Log.d("MyReceiver", "图片5");
 					}
 				} catch (Exception e) {
+					//Log.d("MyReceiver", "图片6");
 					link_addPiLiangRenYuan(MyApplication.okHttpClient,context,zhuJiBeanH,renYuanInFo,0);
-					Log.d("WebsocketPushMsg", e.getMessage());
+					//Log.d("WebsocketPushMsg", e.getMessage());
 				}
 			}
 		});
 	}
 
 	private void XiaZaiTuPian(Context context,RenYuanInFo renYuanInFo){
-
+		//Log.d("MyReceiver", "图片0");
 		Bitmap bitmap=null;
 		try {
 			  bitmap = Glide.with(context)
@@ -1294,7 +1306,6 @@ public class MyReceiver extends BroadcastReceiver {
 		}
 
 		if (bitmap!=null){
-
 			link_piliang_P2(zhuJiBeanH,compressImage(bitmap),renYuanInFo,context);
 
 		}else {
@@ -1324,7 +1335,7 @@ public class MyReceiver extends BroadcastReceiver {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(TAG, json.toString());
+		//Log.d(TAG, json.toString());
 		RequestBody requestBody = RequestBody.create(JSON, json.toString());
 
 //		RequestBody body = new FormBody.Builder()
@@ -1355,20 +1366,21 @@ public class MyReceiver extends BroadcastReceiver {
 
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
-				Log.d("AllConnects", "请求成功"+call.request().toString());
+				//Log.d("MyReceiver", "请求成功"+call.request().toString());
 				//获得返回体
 				try{
+
 					ResponseBody body = response.body();
 					String ss=body.string().trim();
-					Log.d("AllConnects", "批量创建人员"+ss);
+				//	Log.d("MyReceiver", "批量创建人员"+ss);
 					JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
 					if (jsonObject.get("code").getAsInt()==0){
 						JsonObject jo=jsonObject.get("data").getAsJsonObject();
 						renYuanInFo.setSid(jo.get("id").getAsInt());
-						renYuanInFoDao.insert(renYuanInFo);
+						renYuanInFoDao.update(renYuanInFo);
 					}
 				}catch (Exception e){
-					Log.d("WebsocketPushMsg", e.getMessage()+"gggg");
+					Log.d("MyReceiver", e.getMessage()+"gggg");
 				}
 				isA=false;
 
