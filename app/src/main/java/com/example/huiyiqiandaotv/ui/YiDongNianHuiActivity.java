@@ -41,6 +41,8 @@ import com.example.huiyiqiandaotv.MyApplication;
 import com.example.huiyiqiandaotv.R;
 import com.example.huiyiqiandaotv.beans.BaoCunBean;
 import com.example.huiyiqiandaotv.beans.BaoCunBeanDao;
+import com.example.huiyiqiandaotv.beans.BenDiQianDao;
+import com.example.huiyiqiandaotv.beans.BenDiQianDaoDao;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBean;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBeanDao;
 import com.example.huiyiqiandaotv.beans.HuiYiInFoBean;
@@ -166,7 +168,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 	private QianDaoIdDao qianDaoIdDao=null;
 	private String huiYiName="", jubanGongSi="",huiyiZhuTi="";
 	private String tiHuan=null;
-
+	private BenDiQianDaoDao benDiQianDaoDao=null;
 
 
 	public  Handler handler=new Handler(new Handler.Callback() {
@@ -472,10 +474,9 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 			ddd.setYShi(0);
 			ddd.setYTeyao(0);
 			benDiRenShuBeanDao.insert(ddd);
-
-
 			benDiRenShuBean=benDiRenShuBeanDao.load(123456L);
 		}
+		benDiQianDaoDao=MyApplication.myApplication.getDaoSession().getBenDiQianDaoDao();
 		qianDaoIdDao= MyApplication.myApplication.getDaoSession().getQianDaoIdDao();
 		//tanChuangBeanDao=MyApplication.myApplication.getDaoSession().getTanChuangBeanDao();
 		baoCunBeanDao = MyApplication.myApplication.getDaoSession().getBaoCunBeanDao();
@@ -882,14 +883,14 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 					case 0:
 						//员工
 
-						if (bumen.equals("2")){
+						if(bumen.equals("2")){
 							//设置成领导背景
 							toprl.setBackgroundResource(R.drawable.pufa_ld);
 							name.setTypeface(typeFace1);
 							zhuangtai.setTypeface(typeFace1);
 							name.setTextSize(90);
 							name.setText(item.getName());
-							zhuangtai.setText("欢迎领导莅临会议\n\n座位号"+item.getZhiwei());
+							zhuangtai.setText("欢迎您莅临会议\n\n座位号"+item.getZhiwei());
 							imageView.setBackgroundResource(R.drawable.yuanquan);
 							synthesizer.speak(item.getName()+"，欢迎您莅临会议");
 							if (qianDaoIdDao.load(Long.parseLong(item.getGonghao()))!=null && qianDaoIdDao.load(Long.parseLong(item.getGonghao())).getIsQd()){
@@ -934,7 +935,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							zhuangtai.setTypeface(typeFace1);
 							name.setTextSize(80);
 							name.setText(item.getName());
-							zhuangtai.setText("欢迎会议代表莅临\n\n座位号"+item.getZhiwei());
+							zhuangtai.setText("欢迎会议代表莅临\n座位号"+item.getZhiwei());
 							imageView.setBackgroundResource(R.drawable.yuanquan);
 							synthesizer.speak(item.getName()+"，欢迎会议代表莅临");
 							if (qianDaoIdDao.load(Long.parseLong(item.getGonghao()))!=null && qianDaoIdDao.load(Long.parseLong(item.getGonghao())).getIsQd()){
@@ -998,9 +999,11 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 			//头像的高宽
 			if (bumen.equals("2")){
-				lp2.width=dw/3+40;
-				lp2.height=dw/3+40;
+				lp2.leftMargin=20;
+				lp2.width=dw/3+38;
+				lp2.height=dw/3+38;
 			}else if (bumen.equals("0")){
+				lp2.leftMargin=20;
 				lp2.width=dw/3-30;
 				lp2.height=dw/3-30;
 			}else if (bumen.equals("1")){
@@ -1503,7 +1506,11 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
                     e.printStackTrace();
                 }
 
-		link_bg();
+		if (baoCunBean.getHoutaiDiZhi()!=null && !baoCunBean.getHoutaiDiZhi().equals("") && baoCunBean.getZhanghuId()!=null && !baoCunBean.getZhanghuId().equals("") && baoCunBean.getHuiyiId()!=null && !baoCunBean.getHuiyiId().equals("") ){
+			//link_login();
+			link_bg();
+
+		}
 
 		if (netWorkStateReceiver == null) {
 			netWorkStateReceiver = new NetWorkStateReceiver();
@@ -1852,6 +1859,16 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //									Log.d("WebsocketPushMsg", e.getMessage()+"bbb");
 //								}
 //							}
+
+						BenDiQianDao qianDao=new BenDiQianDao();
+						qianDao.setId(Long.parseLong(dataBean.getPerson().getJob_number()));
+						qianDao.setName(dataBean.getPerson().getName());
+						qianDao.setPhone(DateUtils.time(System.currentTimeMillis()+""));
+						try {
+							benDiQianDaoDao.insert(qianDao);
+						}catch (Exception e){
+							e.printStackTrace();
+						}
 
 					}
 //             else if (wbBean.getType().equals("unrecognized")) {

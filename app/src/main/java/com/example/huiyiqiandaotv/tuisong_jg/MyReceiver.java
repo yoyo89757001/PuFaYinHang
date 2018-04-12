@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.huiyiqiandaotv.MyApplication;
 import com.example.huiyiqiandaotv.beans.BaoCunBean;
 import com.example.huiyiqiandaotv.beans.BaoCunBeanDao;
+import com.example.huiyiqiandaotv.beans.BenDiQianDaoDao;
 import com.example.huiyiqiandaotv.beans.PiLiangBean;
 import com.example.huiyiqiandaotv.beans.RenYuanInFo;
 import com.example.huiyiqiandaotv.beans.RenYuanInFoDao;
@@ -1021,6 +1022,8 @@ public class MyReceiver extends BroadcastReceiver {
 	private void link_getHouTaiPiLiang(int id, final Context context, final int status){
 		if (status==3){
 			//删除
+			BenDiQianDaoDao dao=MyApplication.myApplication.getDaoSession().getBenDiQianDaoDao();
+			dao.deleteAll();
 			getOkHttpClient2(context,3);
 
 		}else {

@@ -10,14 +10,19 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.example.huiyiqiandaotv.MyApplication;
 import com.example.huiyiqiandaotv.R;
 import com.example.huiyiqiandaotv.beans.BaoCunBean;
 import com.example.huiyiqiandaotv.beans.BaoCunBeanDao;
+import com.example.huiyiqiandaotv.beans.BenDiQianDao;
+import com.example.huiyiqiandaotv.beans.BenDiQianDaoDao;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBean;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBeanDao;
 import com.example.huiyiqiandaotv.beans.QianDaoIdDao;
@@ -34,6 +39,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.sdsmdg.tastytoast.TastyToast;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -656,29 +662,71 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                 animatorSet12.addListener(new AnimatorListenerAdapter(){
                     @Override public void onAnimationEnd(Animator animation) {
                         //弹窗
-                      BenDiRenShuBeanDao benDiRenShuBeanDao=MyApplication.myApplication.getDaoSession().getBenDiRenShuBeanDao();
-                        QianDaoIdDao qianDaoIdDao=MyApplication.myApplication.getDaoSession().getQianDaoIdDao();
-                        qianDaoIdDao.deleteAll();
-                       BenDiRenShuBean benDiRenShuBean=benDiRenShuBeanDao.load(123456L);
-                       if (benDiRenShuBean!=null){
-                           BenDiRenShuBean ddd=new BenDiRenShuBean();
-                           ddd.setId(123456L);
-                           ddd.setN1(0);
-                           ddd.setNShen(0);
-                           ddd.setNShi(0);
-                           ddd.setNTeyao(0);
-                           ddd.setY1(0);
-                           ddd.setYShen(0);
-                           ddd.setYShi(0);
-                           ddd.setYTeyao(0);
-                           benDiRenShuBeanDao.update(ddd);
-                           TastyToast.makeText(SheZhiActivity.this,"清除成功",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
-                       }else {
-                           TastyToast.makeText(SheZhiActivity.this,"清除失败",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+//                      BenDiRenShuBeanDao benDiRenShuBeanDao=MyApplication.myApplication.getDaoSession().getBenDiRenShuBeanDao();
+//                        QianDaoIdDao qianDaoIdDao=MyApplication.myApplication.getDaoSession().getQianDaoIdDao();
+//                        qianDaoIdDao.deleteAll();
+//                       BenDiRenShuBean benDiRenShuBean=benDiRenShuBeanDao.load(123456L);
+//                       if (benDiRenShuBean!=null){
+//                           BenDiRenShuBean ddd=new BenDiRenShuBean();
+//                           ddd.setId(123456L);
+//                           ddd.setN1(0);
+//                           ddd.setNShen(0);
+//                           ddd.setNShi(0);
+//                           ddd.setNTeyao(0);
+//                           ddd.setY1(0);
+//                           ddd.setYShen(0);
+//                           ddd.setYShi(0);
+//                           ddd.setYTeyao(0);
+//                           benDiRenShuBeanDao.update(ddd);
+//                           TastyToast.makeText(SheZhiActivity.this,"清除成功",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+//                       }else {
+//                           TastyToast.makeText(SheZhiActivity.this,"清除失败",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+//
+//                       }
 
-                       }
+                      //  bt12.setEnabled(false);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BenDiQianDaoDao dao=MyApplication.myApplication.getDaoSession().getBenDiQianDaoDao();
+                                List<BenDiQianDao> diQianDaoList=dao.loadAll();
+                                int size=diQianDaoList.size();
+                                StringBuilder buffer=new StringBuilder();
+                                for (int i=0;i<size;i++){
+                                    buffer.append(diQianDaoList.get(i).getId())
+                                            .append(",").
+                                            append(diQianDaoList.get(i).getName())
+                                            .append(",").
+                                            append(diQianDaoList.get(i).getPhone())
+                                            .append("\n");
+                                }
+                                try {
+                                    savaFileToSD("huiyishuju.txt", buffer.toString());
+                                } catch (Exception e) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bt12.setEnabled(true);
+                                            TastyToast.makeText(SheZhiActivity.this,"写入失败",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
 
-                        bt11.setEnabled(true);
+                                        }
+                                    });
+
+                                    e.printStackTrace();
+                                }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        bt12.setEnabled(true);
+                                        TastyToast.makeText(SheZhiActivity.this,"写入成功",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+
+                                    }
+                                });
+
+                            }
+                        }).start();
+
+
                     }
                 });
                 animatorSet12.start();
@@ -1033,6 +1081,21 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
 
             }
         });
+    }
+
+  //  往SD卡写入文件的方法
+    public void savaFileToSD(String filename, String filecontent) throws Exception {
+        //如果手机已插入sd卡,且app具有读写sd卡的权限
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            filename = Environment.getExternalStorageDirectory().getCanonicalPath() + "/" + filename;
+
+            //这里就不要用openFileOutput了,那个是往手机内存中写数据的
+            FileOutputStream output = new FileOutputStream(filename);
+            output.write(filecontent.getBytes());
+            //将String字符串以字节流的形式写入到输出流中
+            output.close();
+            //关闭输出流
+        }
     }
 
 }

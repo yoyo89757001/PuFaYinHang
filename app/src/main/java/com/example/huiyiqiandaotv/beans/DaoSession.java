@@ -9,6 +9,7 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.example.huiyiqiandaotv.beans.BaoCunBean;
+import com.example.huiyiqiandaotv.beans.BenDiQianDao;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBean;
 import com.example.huiyiqiandaotv.beans.MoShengRenBean;
 import com.example.huiyiqiandaotv.beans.QianDaoId;
@@ -18,6 +19,7 @@ import com.example.huiyiqiandaotv.beans.TanChuangBean;
 import com.example.huiyiqiandaotv.beans.ZhuJiBeanH;
 
 import com.example.huiyiqiandaotv.beans.BaoCunBeanDao;
+import com.example.huiyiqiandaotv.beans.BenDiQianDaoDao;
 import com.example.huiyiqiandaotv.beans.BenDiRenShuBeanDao;
 import com.example.huiyiqiandaotv.beans.MoShengRenBeanDao;
 import com.example.huiyiqiandaotv.beans.QianDaoIdDao;
@@ -36,6 +38,7 @@ import com.example.huiyiqiandaotv.beans.ZhuJiBeanHDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig baoCunBeanDaoConfig;
+    private final DaoConfig benDiQianDaoDaoConfig;
     private final DaoConfig benDiRenShuBeanDaoConfig;
     private final DaoConfig moShengRenBeanDaoConfig;
     private final DaoConfig qianDaoIdDaoConfig;
@@ -45,6 +48,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig zhuJiBeanHDaoConfig;
 
     private final BaoCunBeanDao baoCunBeanDao;
+    private final BenDiQianDaoDao benDiQianDaoDao;
     private final BenDiRenShuBeanDao benDiRenShuBeanDao;
     private final MoShengRenBeanDao moShengRenBeanDao;
     private final QianDaoIdDao qianDaoIdDao;
@@ -59,6 +63,9 @@ public class DaoSession extends AbstractDaoSession {
 
         baoCunBeanDaoConfig = daoConfigMap.get(BaoCunBeanDao.class).clone();
         baoCunBeanDaoConfig.initIdentityScope(type);
+
+        benDiQianDaoDaoConfig = daoConfigMap.get(BenDiQianDaoDao.class).clone();
+        benDiQianDaoDaoConfig.initIdentityScope(type);
 
         benDiRenShuBeanDaoConfig = daoConfigMap.get(BenDiRenShuBeanDao.class).clone();
         benDiRenShuBeanDaoConfig.initIdentityScope(type);
@@ -82,6 +89,7 @@ public class DaoSession extends AbstractDaoSession {
         zhuJiBeanHDaoConfig.initIdentityScope(type);
 
         baoCunBeanDao = new BaoCunBeanDao(baoCunBeanDaoConfig, this);
+        benDiQianDaoDao = new BenDiQianDaoDao(benDiQianDaoDaoConfig, this);
         benDiRenShuBeanDao = new BenDiRenShuBeanDao(benDiRenShuBeanDaoConfig, this);
         moShengRenBeanDao = new MoShengRenBeanDao(moShengRenBeanDaoConfig, this);
         qianDaoIdDao = new QianDaoIdDao(qianDaoIdDaoConfig, this);
@@ -91,6 +99,7 @@ public class DaoSession extends AbstractDaoSession {
         zhuJiBeanHDao = new ZhuJiBeanHDao(zhuJiBeanHDaoConfig, this);
 
         registerDao(BaoCunBean.class, baoCunBeanDao);
+        registerDao(BenDiQianDao.class, benDiQianDaoDao);
         registerDao(BenDiRenShuBean.class, benDiRenShuBeanDao);
         registerDao(MoShengRenBean.class, moShengRenBeanDao);
         registerDao(QianDaoId.class, qianDaoIdDao);
@@ -102,6 +111,7 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         baoCunBeanDaoConfig.clearIdentityScope();
+        benDiQianDaoDaoConfig.clearIdentityScope();
         benDiRenShuBeanDaoConfig.clearIdentityScope();
         moShengRenBeanDaoConfig.clearIdentityScope();
         qianDaoIdDaoConfig.clearIdentityScope();
@@ -113,6 +123,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public BaoCunBeanDao getBaoCunBeanDao() {
         return baoCunBeanDao;
+    }
+
+    public BenDiQianDaoDao getBenDiQianDaoDao() {
+        return benDiQianDaoDao;
     }
 
     public BenDiRenShuBeanDao getBenDiRenShuBeanDao() {
