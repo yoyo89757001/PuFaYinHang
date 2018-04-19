@@ -16,11 +16,14 @@
 
 package com.example.huiyiqiandaotv.view;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.widget.TextView;
+
+import com.example.huiyiqiandaotv.ui.YiDongNianHuiActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -65,7 +68,6 @@ public final class JumpingBeans {
      * The default duration of a whole jumping animation loop, in milliseconds.
      */
     public static final int DEFAULT_LOOP_DURATION = 1300;   // ms
-
     public static final String ELLIPSIS_GLYPH = "…";
     public static final String THREE_DOTS_ELLIPSIS = "...";
     public static final int THREE_DOTS_ELLIPSIS_LENGTH = 3;
@@ -83,6 +85,7 @@ public final class JumpingBeans {
      * applied to the provided {@code TextView}.
      *
      * @param textView The TextView to apply the JumpingBeans to
+     * @param yiDongNianHuiActivity
      * @return the {@link net.frakbot.jumpingbeans.JumpingBeans.Builder}
      */
     public static Builder with(@NonNull TextView textView) {
@@ -255,6 +258,7 @@ public final class JumpingBeans {
          * @see #setIsWave(boolean)
          */
         public Builder makeTextJump(int startPos, int endPos) {
+
             CharSequence text = textView.getText();
             ensureTextCanJump(startPos, endPos, text);
 

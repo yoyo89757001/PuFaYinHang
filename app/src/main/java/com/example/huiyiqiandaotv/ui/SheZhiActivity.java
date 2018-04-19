@@ -72,7 +72,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
         baoCunBeanDao= MyApplication.myApplication.getDaoSession().getBaoCunBeanDao();
         baoCunBean=baoCunBeanDao.load(123456L);
         if (baoCunBean.getWenzi()==null){
-            baoCunBean.setWenzi("中国电信");
+            baoCunBean.setWenzi("");
         }
 
         baoCunBeanDao.update(baoCunBean);

@@ -135,8 +135,10 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //	private String zhuji=null;
 //	private static final String zhuji2="http://121.46.3.20";
 	private JumpingBeans jumpingBeans1;
+
 	private static Vector<TanChuangBean> lingdaoList=null;
 	private static Vector<TanChuangBean> yuangongList=null;
+
 	private int dw,dh;
 	private ImageView dabg,erweima;
 	private BaoCunBeanDao baoCunBeanDao=null;
@@ -150,7 +152,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //	private TanChuangBeanDao tanChuangBeanDao=null;
 	private Typeface typeFace1;
 	private RelativeLayout tops_rl;
-	private TextView y1,n1;
+	private TextView y1,n1,xiaoshi,riqi;
 	private String zhanghuID=null,huiyiID=null;
 	protected Handler mainHandler;
 	private String appId = "10588094";
@@ -506,6 +508,8 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //		// 添加一个彩色过滤器特效“hello_layer”上的内容
 //		vv.addColorFilterToContent("hello_layer", "hello", colorFilter);
 
+
+
 		dabg= (ImageView) findViewById(R.id.dabg);
 		erweima= (ImageView) findViewById(R.id.erweima);
 		link_bgbg= (TextView) findViewById(R.id.bgbg);
@@ -532,7 +536,13 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 				t2.setTextSize(baoCunBean.getSize());
 			}
 		}
+		xiaoshi= (TextView) findViewById(R.id.xiaoshi);
+		riqi= (TextView) findViewById(R.id.riqi);
+		String time=(System.currentTimeMillis())+"";
+		xiaoshi.setText(DateUtils.timeMinute(time));
+		xiaoshi.setTypeface(typeFace1);
 
+		//riqi.setText(DateUtils.timesTwo(time));
 		y1= (TextView) findViewById(R.id.y1);
 //		y2= (TextView) findViewById(R.id.y2);
 //		y3= (TextView) findViewById(R.id.y3);
@@ -730,8 +740,9 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 		jumpingBeans1 = JumpingBeans.with(zizi)
 				.makeTextJump(0, zizi.getText().toString().length())
 				.setIsWave(true)
-				.setLoopDuration(1000)
+				.setLoopDuration(1500)
 				.build();
+
 
 //		if (baoCunBean.getHoutaiDiZhi()!=null && !baoCunBean.getHoutaiDiZhi().equals("") && baoCunBean.getZhanghuId()!=null && !baoCunBean.getZhanghuId().equals("") && baoCunBean.getHuiyiId()!=null && !baoCunBean.getHuiyiId().equals("")){
 //			//link_login();
@@ -854,11 +865,15 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 			ImageView imageView= helper.getView(R.id.touxiang);
 			TextView name=helper.getView(R.id.name33);
+			TextView zuowei=helper.getView(R.id.zuowei);
 			LottieAnimationView lottieAnimationView=helper.getView(R.id.dagou);
 			TextView zhuangtai=helper.getView(R.id.zhuangtai33);
-			RelativeLayout toprl=helper.getView(R.id.ggghhh);
-			RelativeLayout rl=helper.getView(R.id.ffflll);
+			RelativeLayout toprl=helper.getView(R.id.ffflll);
+			//RelativeLayout rl=helper.getView(R.id.ffflll);
 			String bumen=item.getBumen();
+			name.setTypeface(typeFace1);
+			zhuangtai.setTypeface(typeFace1);
+			zuowei.setTypeface(typeFace1);
 
 //			if (helper.getAdapterPosition()==0 ){
 //				rl.setBackgroundColor(Color.parseColor("#00000000"));
@@ -886,13 +901,13 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 						if(bumen.equals("2")){
 							//设置成领导背景
 							toprl.setBackgroundResource(R.drawable.pufa_ld);
-							name.setTypeface(typeFace1);
-							zhuangtai.setTypeface(typeFace1);
+
 							name.setTextSize(90);
 							name.setText(item.getName());
-							zhuangtai.setText("欢迎您莅临会议\n\n座位号"+item.getZhiwei());
+							zhuangtai.setText("欢迎领导莅临会议");
+							zuowei.setText("座位号"+item.getZhiwei());
 							imageView.setBackgroundResource(R.drawable.yuanquan);
-							synthesizer.speak(item.getName()+"，欢迎您莅临会议");
+							synthesizer.speak(item.getName()+"，欢迎领导莅临会议");
 							if (qianDaoIdDao.load(Long.parseLong(item.getGonghao()))!=null && qianDaoIdDao.load(Long.parseLong(item.getGonghao())).getIsQd()){
 								lottieAnimationView.setVisibility(View.GONE);
 
@@ -902,14 +917,12 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 								lottieAnimationView.setVisibility(View.VISIBLE);
 							}
 
-						}else if (bumen.equals("1")){
+						}else if (bumen.equals("1")){//嘉宾
 							imageView.setBackgroundColor(Color.parseColor("#00000000"));
 							toprl.setBackgroundResource(R.drawable.pufa_yg);
-							name.setTypeface(typeFace1);
-							zhuangtai.setTypeface(typeFace1);
 							name.setText(item.getName());
-							try {
 
+							try {
 								if (qianDaoIdDao.load(Long.parseLong(item.getGonghao()))!=null && qianDaoIdDao.load(Long.parseLong(item.getGonghao())).getIsQd()){
 									zhuangtai.setText("你已签到");
 									synthesizer.speak(item.getName()+"你已签到");
@@ -921,6 +934,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 									lottieAnimationView.playAnimation();
 									lottieAnimationView.setVisibility(View.VISIBLE);
 									zhuangtai.setText("签到成功");
+									zuowei.setText("座位号"+item.getZhiwei());
 									synthesizer.speak(item.getName()+"签到成功");
 
 								}
@@ -931,11 +945,10 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 						}else if (bumen.equals("0")){
 							toprl.setBackgroundResource(R.drawable.pufa_ld);
-							name.setTypeface(typeFace1);
-							zhuangtai.setTypeface(typeFace1);
 							name.setTextSize(80);
 							name.setText(item.getName());
-							zhuangtai.setText("欢迎会议代表莅临\n座位号"+item.getZhiwei());
+							zhuangtai.setText("欢迎会议代表莅临");
+							zuowei.setText("座位号"+item.getZhiwei());
 							imageView.setBackgroundResource(R.drawable.yuanquan);
 							synthesizer.speak(item.getName()+"，欢迎会议代表莅临");
 							if (qianDaoIdDao.load(Long.parseLong(item.getGonghao()))!=null && qianDaoIdDao.load(Long.parseLong(item.getGonghao())).getIsQd()){
@@ -948,32 +961,8 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 							}
 						}
 
-
 						break;
-					case 1:
-						//访客
-						//toprl.setBackgroundResource(R.drawable.zidonghuoqu15);
-						name.setTypeface(typeFace1);
-						zhuangtai.setTypeface(typeFace1);
-						name.setText(item.getName());
-						zhuangtai.setText("返校报道成功");
 
-						//richeng.setText("");
-						//name.setText(item.getName());
-						//autoScrollTextView.setText("欢迎你来本公司参观指导。");
-						break;
-					case 2:
-						name.setTypeface(typeFace1);
-						zhuangtai.setTypeface(typeFace1);
-						name.setText(item.getName());
-					//	zhuangtai.setText("返校报道成功");
-
-						//VIP访客
-						//	toprl.setBackgroundResource(R.drawable.ms_bg);
-						//	richeng.setText("");
-						//	name.setText(item.getName());
-						//autoScrollTextView.setText("欢迎VIP访客 "+item.getName()+" 来本公司指导工作。");
-						break;
 				}
 				if (item.getTouxiang()!=null){
 
@@ -1016,16 +1005,18 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 
 			//弹窗的高宽
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) toprl.getLayoutParams();
+			RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) toprl.getLayoutParams();
 			if ( bumen.equals("2")){
-				lp.width=dw;
+				lp.width=dw-20;
 				lp.height=((dh*7)/10)/2;
-
+				lp.leftMargin=10;
 			}else if (bumen.equals("0")){
-				lp.width=dw;
+				lp.width=dw-20;
+				lp.leftMargin=10;
 				lp.height=((dh*7)/10)/3;
 			}else if (bumen.equals("1")){
 				lp.width=dw-100;
+				lp.leftMargin=50;
 				lp.height=((dh*7)/10)/3-120;
 			}
 			toprl.setLayoutParams(lp);
@@ -1099,12 +1090,12 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 			t2.setTypeface(typeFace1);
 			t2.setText(item.getName());
 			t3.setTypeface(typeFace1);
-			if (item.getZhiwei()!=null && !item.getZhiwei().equals("")){
-				t3.setText("座位号:"+item.getZhiwei());
-
-			}else {
+//			if (item.getZhiwei()!=null && !item.getZhiwei().equals("")){
+//				t3.setText("座位号:"+item.getZhiwei());
+//
+//			}else {
 			t3.setText(DateUtils.time(System.currentTimeMillis()+""));
-			}
+		//	}
 
 			ImageView imageView=helper.getView(R.id.touxiang);
 
@@ -1325,7 +1316,9 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 			//Log.d(TAG, "intent:" + intent.getAction());
 
 			if (intent.getAction().equals(Intent.ACTION_TIME_TICK)) {
-
+				String time=(System.currentTimeMillis())+"";
+				xiaoshi.setText(DateUtils.timeMinute(time));
+				riqi.setText(DateUtils.timesTwo(time));
 				//String time=(System.currentTimeMillis())+"";
 			//	xiaoshi.setText(DateUtils.timeMinute(time));
 			//	riqi.setText(DateUtils.timesTwo(time));
@@ -1378,7 +1371,11 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 
 				if (intent.getAction().equals("shoudongshuaxin")) {
 
-
+					jumpingBeans1 = JumpingBeans.with(zizi)
+							.makeTextJump(0, zizi.getText().toString().length())
+							.setIsWave(true)
+							.setLoopDuration(1500)
+							.build();
 				}
 
 				if (intent.getAction().equals("guanbi")){
@@ -1502,7 +1499,6 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
                     //将二维码在界面中显示
                     erweima.setImageBitmap(bm);
                 } catch (WriterException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 

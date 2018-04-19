@@ -16,8 +16,10 @@
 
 package com.example.huiyiqiandaotv.view;
 
+import android.animation.Animator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
@@ -26,9 +28,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.huiyiqiandaotv.MyApplication;
+
 import java.lang.ref.WeakReference;
 
-/*package*/ final class JumpingBeansSpan extends SuperscriptSpan implements ValueAnimator.AnimatorUpdateListener {
+/*package*/ final class JumpingBeansSpan extends SuperscriptSpan implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
 
     private final WeakReference<TextView> textView;
     private final int delay;
@@ -72,7 +76,9 @@ import java.lang.ref.WeakReference;
         jumpAnimator.setRepeatCount(ValueAnimator.INFINITE);
         jumpAnimator.setRepeatMode(ValueAnimator.RESTART);
         jumpAnimator.addUpdateListener(this);
+        jumpAnimator.addListener(this);
         jumpAnimator.start();
+
     }
 
     @Override
@@ -85,6 +91,8 @@ import java.lang.ref.WeakReference;
             cleanupAndComplainAboutUserBeingAFool();
         }
     }
+
+
 
     private void updateAnimationFor(@NonNull ValueAnimator animation, @NonNull TextView v) {
         if (isAttachedToHierarchy(v)) {
@@ -114,6 +122,28 @@ import java.lang.ref.WeakReference;
         if (textView.get() != null) {
             textView.clear();
         }
+    }
+
+    @Override
+    public void onAnimationStart(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        Intent intent=new Intent("shoudongshuaxin");
+        MyApplication.myApplication.sendBroadcast(intent);
+
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+
     }
 
     /**
