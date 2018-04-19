@@ -1316,58 +1316,58 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 			//Log.d(TAG, "intent:" + intent.getAction());
 
 			if (intent.getAction().equals(Intent.ACTION_TIME_TICK)) {
-				String time=(System.currentTimeMillis())+"";
+				String time = (System.currentTimeMillis()) + "";
 				xiaoshi.setText(DateUtils.timeMinute(time));
 				riqi.setText(DateUtils.timesTwo(time));
 				//String time=(System.currentTimeMillis())+"";
-			//	xiaoshi.setText(DateUtils.timeMinute(time));
-			//	riqi.setText(DateUtils.timesTwo(time));
+				//	xiaoshi.setText(DateUtils.timeMinute(time));
+				//	riqi.setText(DateUtils.timesTwo(time));
 				//xingqi.setText(DateUtils.getWeek(System.currentTimeMillis()));
-				if (baoCunBean.getZhanghuId()!=null && baoCunBean.getHuiyiId()!=null)
-				link_shishi_renshu();
+				if (baoCunBean.getZhanghuId() != null && baoCunBean.getHuiyiId() != null)
+					link_shishi_renshu();
 
 			}
-				if (intent.getAction().equals("duanxianchonglian")) {
+			if (intent.getAction().equals("duanxianchonglian")) {
 
-					//断线重连
-					if (webSocketClient!=null){
+				//断线重连
+				if (webSocketClient != null) {
 
 					//	Log.d(TAG, "进来1");
 
-						if (!isLianJie){
+					if (!isLianJie) {
 						//	Log.d(TAG, "进来2");
-					try {
-						baoCunBean=baoCunBeanDao.load(123456L);
-						WebsocketPushMsg websocketPushMsg = new WebsocketPushMsg();
-						websocketPushMsg.close();
-						if (baoCunBean.getZhujiDiZhi() != null && baoCunBean.getShipingIP() != null) {
-							websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), baoCunBean.getShipingIP());
-						}
-
-
-					} catch (Exception e) {
-						Log.d(TAG, e.getMessage()+"aaa");
-
-					}
-						}
-				}
-				if (intent.getAction().equals("gxshipingdizhi")) {
-					//重新开启刷脸监听
-					baoCunBean=baoCunBeanDao.load(123456L);
-					if (baoCunBean.getShipingIP() != null && baoCunBean.getZhujiDiZhi() != null) {
-
 						try {
+							baoCunBean = baoCunBeanDao.load(123456L);
 							WebsocketPushMsg websocketPushMsg = new WebsocketPushMsg();
 							websocketPushMsg.close();
-							if (baoCunBean.getShipingIP() != null && baoCunBean.getZhujiDiZhi() != null) {
+							if (baoCunBean.getZhujiDiZhi() != null && baoCunBean.getShipingIP() != null) {
 								websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), baoCunBean.getShipingIP());
 							}
-						} catch (Exception e) {
-							Log.d(TAG, e.getMessage()+"fghj");
-						}
 
+
+						} catch (Exception e) {
+							Log.d(TAG, e.getMessage() + "aaa");
+
+						}
 					}
 				}
+			}
+			if (intent.getAction().equals("gxshipingdizhi")) {
+				//重新开启刷脸监听
+				baoCunBean = baoCunBeanDao.load(123456L);
+				if (baoCunBean.getShipingIP() != null && baoCunBean.getZhujiDiZhi() != null) {
+					try {
+						WebsocketPushMsg websocketPushMsg = new WebsocketPushMsg();
+						websocketPushMsg.close();
+						if (baoCunBean.getShipingIP() != null && baoCunBean.getZhujiDiZhi() != null) {
+							websocketPushMsg.startConnection(baoCunBean.getZhujiDiZhi(), baoCunBean.getShipingIP());
+						}
+					} catch (Exception e) {
+						Log.d(TAG, e.getMessage() + "fghj");
+					}
+
+				}
+			}
 
 				if (intent.getAction().equals("shoudongshuaxin")) {
 
@@ -1383,9 +1383,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 					finish();
 				}
 			}
-	//	}
 
-	}
 	}
 
 	// 遍历接收一个文件路径，然后把文件子目录中的所有文件遍历并输出来
