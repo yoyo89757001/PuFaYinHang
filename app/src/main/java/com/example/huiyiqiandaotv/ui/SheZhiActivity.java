@@ -1090,7 +1090,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
             filename = Environment.getExternalStorageDirectory().getCanonicalPath() + "/" + filename;
 
             //这里就不要用openFileOutput了,那个是往手机内存中写数据的
-            FileOutputStream output = new FileOutputStream(filename);
+            FileOutputStream output = new FileOutputStream(filename,true);
             output.write(filecontent.getBytes());
             //将String字符串以字节流的形式写入到输出流中
             output.close();

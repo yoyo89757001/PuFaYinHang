@@ -81,6 +81,6 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-android:1.9.8"
     compile "com.badlogicgames.gdx:gdx-freetype:1.9.8"
     compile 'com.facebook.rebound:rebound:0.3.8'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.3'
     compile 'com.airbnb.android:lottie:2.0.0' //json动画框架
 }

@@ -135,7 +135,7 @@ public class YiDongNianHuiActivity extends Activity implements RecytviewCash {
 //	private String zhuji=null;
 //	private static final String zhuji2="http://121.46.3.20";
 	private JumpingBeans jumpingBeans1;
-
+	
 	private static Vector<TanChuangBean> lingdaoList=null;
 	private static Vector<TanChuangBean> yuangongList=null;
 
